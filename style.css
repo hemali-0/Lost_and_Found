@@ -1,0 +1,686 @@
+/* =============================================
+   FOUND_ — Campus Lost & Found
+   styles.css
+   ============================================= */
+
+/* --- CSS VARIABLES --- */
+:root {
+  --bg: #0a0a0f;
+  --surface: #111118;
+  --card: #16161f;
+  --border: #2a2a3a;
+  --accent: #f5e642;
+  --accent2: #42f5a1;
+  --accent3: #f54242;
+  --text: #e8e8f0;
+  --muted: #7a7a9a;
+  --lost-color: #f54242;
+  --found-color: #42f5a1;
+}
+
+/* --- RESET --- */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* --- BASE --- */
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Syne', sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Noise overlay */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.4;
+}
+
+/* =============================================
+   HEADER
+   ============================================= */
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem 3rem;
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  background: rgba(10, 10, 15, 0.92);
+  backdrop-filter: blur(12px);
+  z-index: 100;
+}
+
+.logo {
+  font-family: 'Space Mono', monospace;
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.logo span {
+  color: var(--accent);
+  display: inline-block;
+  animation: blink 2s step-end infinite;
+}
+
+nav {
+  display: flex;
+  gap: 0.5rem;
+}
+
+nav button {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  font-family: 'Space Mono', monospace;
+  font-size: 0.75rem;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+nav button:hover,
+nav button.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #000;
+}
+
+/* =============================================
+   HERO
+   ============================================= */
+.hero {
+  padding: 5rem 3rem 3rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.hero-eyebrow {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.3em;
+  color: var(--accent);
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+  opacity: 0;
+  animation: fadeUp 0.6s 0.1s forwards;
+}
+
+.hero h1 {
+  font-size: clamp(3rem, 8vw, 7rem);
+  font-weight: 800;
+  line-height: 0.9;
+  letter-spacing: -0.04em;
+  opacity: 0;
+  animation: fadeUp 0.6s 0.2s forwards;
+}
+
+.hero h1 .highlight {
+  color: var(--accent);
+}
+
+.hero h1 .outline {
+  -webkit-text-stroke: 2px var(--text);
+  color: transparent;
+}
+
+.hero-sub {
+  margin-top: 1.5rem;
+  font-size: 1rem;
+  color: var(--muted);
+  max-width: 480px;
+  line-height: 1.6;
+  opacity: 0;
+  animation: fadeUp 0.6s 0.3s forwards;
+}
+
+.hero-stats {
+  display: flex;
+  gap: 3rem;
+  margin-top: 2.5rem;
+  opacity: 0;
+  animation: fadeUp 0.6s 0.4s forwards;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.stat-num {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--accent);
+}
+
+.stat-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--muted);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+/* =============================================
+   MAIN LAYOUT
+   ============================================= */
+.main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 3rem 4rem;
+}
+
+/* =============================================
+   TICKER
+   ============================================= */
+.ticker-wrap {
+  overflow: hidden;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 0.5rem 0;
+  margin-bottom: 2rem;
+}
+
+.ticker {
+  display: flex;
+  gap: 3rem;
+  animation: ticker 25s linear infinite;
+  white-space: nowrap;
+}
+
+.ticker span {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.ticker span.dot {
+  color: var(--accent);
+  flex-shrink: 0;
+}
+
+/* =============================================
+   SEARCH & FILTERS
+   ============================================= */
+.search-wrap {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 2.5rem;
+  opacity: 0;
+  animation: fadeUp 0.6s 0.5s forwards;
+}
+
+.search-input {
+  flex: 1;
+  background: var(--card);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-family: 'Space Mono', monospace;
+  font-size: 0.9rem;
+  padding: 1rem 1.5rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.search-input:focus {
+  border-color: var(--accent);
+}
+
+.search-input::placeholder {
+  color: var(--muted);
+}
+
+.filter-tabs {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.filter-btn {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  transition: all 0.15s;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+}
+
+.filter-btn.active-all  { background: var(--text);        border-color: var(--text);        color: #000; }
+.filter-btn.active-lost { background: var(--lost-color);  border-color: var(--lost-color);  color: #fff; }
+.filter-btn.active-found{ background: var(--found-color); border-color: var(--found-color); color: #000; }
+
+.filter-btn:not(.active-all):not(.active-lost):not(.active-found):hover {
+  border-color: var(--text);
+  color: var(--text);
+}
+
+/* =============================================
+   SECTION HEADER
+   ============================================= */
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.section-title {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.count-badge {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  background: var(--border);
+  color: var(--muted);
+  padding: 0.2rem 0.6rem;
+}
+
+/* =============================================
+   ITEMS GRID & CARDS
+   ============================================= */
+.items-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  gap: 1rem;
+}
+
+.item-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  padding: 1.5rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+  overflow: hidden;
+  animation: fadeUp 0.4s both;
+}
+
+/* Colored left-border strip */
+.item-card::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+}
+
+.item-card.lost::before  { background: var(--lost-color); }
+.item-card.found::before { background: var(--found-color); }
+
+.item-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(245, 230, 66, 0.08);
+}
+
+.item-card.resolved {
+  opacity: 0.45;
+}
+
+.resolved-badge {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.55rem;
+  letter-spacing: 0.15em;
+  background: var(--found-color);
+  color: #000;
+  padding: 0.15rem 0.5rem;
+  text-transform: uppercase;
+}
+
+.item-emoji {
+  font-size: 2rem;
+  margin-bottom: 0.75rem;
+  display: block;
+}
+
+.item-tag {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 0.2rem 0.6rem;
+  display: inline-block;
+  margin-bottom: 0.75rem;
+}
+
+.item-tag.lost  { background: rgba(245, 66, 66, 0.15);  color: var(--lost-color); }
+.item-tag.found { background: rgba(66, 245, 161, 0.12); color: var(--found-color); }
+
+.item-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 0.4rem;
+  letter-spacing: -0.01em;
+}
+
+.item-desc {
+  font-size: 0.82rem;
+  color: var(--muted);
+  line-height: 1.5;
+  margin-bottom: 1rem;
+}
+
+.item-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid var(--border);
+  padding-top: 0.75rem;
+}
+
+.item-location,
+.item-date {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* No results */
+.no-results {
+  text-align: center;
+  padding: 4rem;
+  color: var(--muted);
+  font-family: 'Space Mono', monospace;
+  font-size: 0.8rem;
+  letter-spacing: 0.1em;
+  display: none;
+}
+
+/* =============================================
+   FLOATING ACTION BUTTON
+   ============================================= */
+.fab {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  background: var(--accent);
+  color: #000;
+  border: none;
+  width: 56px;
+  height: 56px;
+  font-size: 1.5rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 24px rgba(245, 230, 66, 0.3);
+  transition: all 0.2s;
+  z-index: 500;
+}
+
+.fab:hover {
+  transform: scale(1.1) rotate(45deg);
+}
+
+/* =============================================
+   MODALS
+   ============================================= */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(8px);
+  z-index: 1000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.modal-overlay.open {
+  display: flex;
+}
+
+.modal {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  width: 100%;
+  max-width: 560px;
+  padding: 2.5rem;
+  position: relative;
+  animation: modalIn 0.25s ease;
+}
+
+.modal-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: all 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-close:hover {
+  border-color: var(--accent3);
+  color: var(--accent3);
+}
+
+.modal h2 {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 1.5rem;
+}
+
+/* =============================================
+   FORM ELEMENTS
+   ============================================= */
+.form-group {
+  margin-bottom: 1.25rem;
+}
+
+.form-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--muted);
+  display: block;
+  margin-bottom: 0.4rem;
+}
+
+.form-input,
+.form-select,
+.form-textarea {
+  width: 100%;
+  background: var(--card);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-family: 'Space Mono', monospace;
+  font-size: 0.82rem;
+  padding: 0.75rem 1rem;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.form-input:focus,
+.form-select:focus,
+.form-textarea:focus {
+  border-color: var(--accent);
+}
+
+.form-select {
+  cursor: pointer;
+}
+
+.form-textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+/* Lost / Found toggle in form */
+.type-toggle {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.type-btn {
+  padding: 0.75rem;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--muted);
+  font-family: 'Space Mono', monospace;
+  font-size: 0.75rem;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  transition: all 0.15s;
+}
+
+.type-btn.lost-active  { background: rgba(245, 66, 66, 0.15);  border-color: var(--lost-color);  color: var(--lost-color); }
+.type-btn.found-active { background: rgba(66, 245, 161, 0.12); border-color: var(--found-color); color: var(--found-color); }
+
+.submit-btn {
+  width: 100%;
+  background: var(--accent);
+  border: none;
+  color: #000;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 1rem;
+  cursor: pointer;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  transition: all 0.15s;
+  margin-top: 0.5rem;
+}
+
+.submit-btn:hover {
+  background: #fff;
+  transform: translateY(-1px);
+}
+
+/* Contact info box */
+.contact-info-box {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  background: var(--card);
+  border: 1px solid var(--border);
+}
+
+.contact-value {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.85rem;
+  color: var(--accent);
+}
+
+.contact-note {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--muted);
+  margin-top: 1rem;
+  line-height: 1.6;
+}
+
+/* =============================================
+   TOAST NOTIFICATION
+   ============================================= */
+.toast {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  background: var(--found-color);
+  color: #000;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  padding: 1rem 1.5rem;
+  z-index: 9000;
+  transform: translateY(100px);
+  opacity: 0;
+  transition: all 0.3s;
+  text-transform: uppercase;
+}
+
+.toast.show {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* =============================================
+   ANIMATIONS
+   ============================================= */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+
+@keyframes ticker {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+@keyframes modalIn {
+  from { opacity: 0; transform: scale(0.95) translateY(10px); }
+  to   { opacity: 1; transform: scale(1)    translateY(0); }
+}
+
+/* =============================================
+   RESPONSIVE
+   ============================================= */
+@media (max-width: 768px) {
+  header          { padding: 1rem 1.5rem; }
+  .hero, .main    { padding-left: 1.5rem; padding-right: 1.5rem; }
+  .hero h1        { font-size: 3.5rem; }
+  .hero-stats     { gap: 1.5rem; flex-wrap: wrap; }
+  .form-row       { grid-template-columns: 1fr; }
+  .search-wrap    { flex-direction: column; }
+  nav             { display: none; }
+  .filter-tabs    { overflow-x: auto; }
+}

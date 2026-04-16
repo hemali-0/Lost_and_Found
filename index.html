@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FOUND — Campus Lost & Found</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- =============================================
+     HEADER
+     ============================================= -->
+<header>
+  <div class="logo">F0UND<span>_</span></div>
+  <nav>
+    <button class="active">Browse</button>
+    <button onclick="openReport()">+ Report Item</button>
+  </nav>
+</header>
+
+<!-- =============================================
+     HERO
+     ============================================= -->
+<section class="hero">
+  <p class="hero-eyebrow">// Campus Lost & Found Network</p>
+  <h1>
+    <span class="highlight">Lost</span> it?<br>
+    <span class="outline">Find</span> it.
+  </h1>
+  <p class="hero-sub">Report lost items or help reunite found belongings with their owners across campus.</p>
+  <div class="hero-stats">
+    <div class="stat">
+      <span class="stat-num" id="stat-total">0</span>
+      <span class="stat-label">Total Reports</span>
+    </div>
+    <div class="stat">
+      <span class="stat-num" id="stat-lost">0</span>
+      <span class="stat-label">Items Lost</span>
+    </div>
+    <div class="stat">
+      <span class="stat-num" id="stat-found">0</span>
+      <span class="stat-label">Items Found</span>
+    </div>
+    <div class="stat">
+      <span class="stat-num" id="stat-resolved">0</span>
+      <span class="stat-label">Reunited</span>
+    </div>
+  </div>
+</section>
+
+<!-- =============================================
+     MAIN CONTENT
+     ============================================= -->
+<main class="main">
+
+  <!-- Ticker -->
+  <div class="ticker-wrap">
+    <div class="ticker">
+      <span>📍 Library Block A</span><span class="dot">◆</span>
+      <span>🎒 Lost: Backpack — Blue, near Canteen</span><span class="dot">◆</span>
+      <span>🔑 Found: Keys — Main Gate</span><span class="dot">◆</span>
+      <span>📱 Lost: Phone — Lab 3</span><span class="dot">◆</span>
+      <span>💳 Found: ID Card — Hostel D</span><span class="dot">◆</span>
+      <!-- duplicate for seamless loop -->
+      <span>📍 Library Block A</span><span class="dot">◆</span>
+      <span>🎒 Lost: Backpack — Blue, near Canteen</span><span class="dot">◆</span>
+      <span>🔑 Found: Keys — Main Gate</span><span class="dot">◆</span>
+      <span>📱 Lost: Phone — Lab 3</span><span class="dot">◆</span>
+      <span>💳 Found: ID Card — Hostel D</span><span class="dot">◆</span>
+    </div>
+  </div>
+
+  <!-- Search + Filters -->
+  <div class="search-wrap">
+    <input
+      class="search-input"
+      type="text"
+      id="searchInput"
+      placeholder="Search by item name, location, description..."
+      oninput="filterItems()"
+    >
+    <div class="filter-tabs">
+      <button class="filter-btn active-all"  id="btn-all"   onclick="setFilter('all')">All</button>
+      <button class="filter-btn"             id="btn-lost"  onclick="setFilter('lost')">Lost</button>
+      <button class="filter-btn"             id="btn-found" onclick="setFilter('found')">Found</button>
+    </div>
+  </div>
+
+  <!-- Section header -->
+  <div class="section-header">
+    <span class="section-title">// Recent Reports</span>
+    <span class="count-badge" id="result-count">0 items</span>
+  </div>
+
+  <!-- Cards grid -->
+  <div class="items-grid" id="items-grid"></div>
+  <div class="no-results"  id="no-results">NO ITEMS MATCH YOUR SEARCH</div>
+
+</main>
+
+<!-- Floating Action Button -->
+<button class="fab" onclick="openReport()" title="Report Item">+</button>
+
+<!-- =============================================
+     REPORT MODAL
+     ============================================= -->
+<div class="modal-overlay" id="reportModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeReport()">✕</button>
+    <h2>// Report an Item</h2>
+
+    <div class="type-toggle">
+      <button class="type-btn lost-active" id="typeLost"  onclick="setType('lost')">I Lost Something</button>
+      <button class="type-btn"             id="typeFound" onclick="setType('found')">I Found Something</button>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="f-name">Item Name *</label>
+      <input class="form-input" id="f-name" type="text" placeholder="e.g. Blue Backpack, iPhone 13, Keys...">
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="f-desc">Description</label>
+      <textarea class="form-textarea" id="f-desc" placeholder="Color, brand, distinctive features..."></textarea>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label" for="f-location">Location *</label>
+        <select class="form-select" id="f-location">
+          <option value="">Select location</option>
+          <option>Main Library</option>
+          <option>Canteen / Cafeteria</option>
+          <option>Lecture Hall Block A</option>
+          <option>Lecture Hall Block B</option>
+          <option>Computer Lab</option>
+          <option>Sports Ground</option>
+          <option>Hostel A</option>
+          <option>Hostel B</option>
+          <option>Hostel C</option>
+          <option>Admin Block</option>
+          <option>Main Gate</option>
+          <option>Parking Lot</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="f-category">Category</label>
+        <select class="form-select" id="f-category">
+          <option>Electronics</option>
+          <option>Bag / Backpack</option>
+          <option>ID / Cards</option>
+          <option>Keys</option>
+          <option>Books / Stationery</option>
+          <option>Clothing</option>
+          <option>Accessories</option>
+          <option>Sports Equipment</option>
+          <option>Other</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="f-contact">Your Contact (email or phone) *</label>
+      <input class="form-input" id="f-contact" type="text" placeholder="your@email.com or 9XXXXXXXX">
+    </div>
+
+    <button class="submit-btn" onclick="submitReport()">Submit Report →</button>
+  </div>
+</div>
+
+<!-- =============================================
+     CONTACT MODAL
+     ============================================= -->
+<div class="modal-overlay" id="contactModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeContact()">✕</button>
+    <h2>// Contact Reporter</h2>
+    <div id="contact-detail"></div>
+    <div class="contact-info-box">
+      <div class="form-label">Contact Info</div>
+      <div class="contact-value" id="contact-info"></div>
+    </div>
+    <p class="contact-note">Please reach out directly to arrange item return. Be respectful and verify ownership.</p>
+  </div>
+</div>
+
+<!-- Toast notification -->
+<div class="toast" id="toast"></div>
+
+<!-- =============================================
+     SCRIPT
+     ============================================= -->
+<script src="app.js"></script>
+
+</body>
+</html>
